@@ -2206,6 +2206,14 @@ def main() -> int:
                          "SAPI notes, response heads)")
     args = ap.parse_args()
 
+    # Lab-only guard: refuse any target that is not loopback.  This is checked
+    # before the first byte is sent, so an accidental public URL never gets a
+    # probe.
+    if args.url:
+        host = (urllib.parse.urlsplit(args.url).hostname or "").lower()
+    else:
+        host = (args.fcgi or "").rsplit(":", 1)[0].strip("[]").lower()
+
     set_verbose(args.verbose)
     set_legend(not args.no_legend)
     set_color(
