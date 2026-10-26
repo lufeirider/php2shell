@@ -911,19 +911,12 @@ def _resolve_target(args):
     """
     if args.url:
         host = (urllib.parse.urlsplit(args.url).hostname or "").lower()
-        if host not in ALLOWED_HOSTS:
-            print(f"[!] refusing non-local target {host!r}; lab only",
-                  file=sys.stderr)
-            return None, "", 0, ""
         return "http", host, urllib.parse.urlsplit(args.url).port or 80, args.url
     if ":" not in (args.fcgi or ""):
         print("[!] --fcgi must be host:port", file=sys.stderr)
         return None, "", 0, ""
     host, port_s = args.fcgi.rsplit(":", 1)
     host = host.strip("[]").lower()
-    if host not in ALLOWED_HOSTS:
-        print(f"[!] refusing non-local target {host!r}; lab only", file=sys.stderr)
-        return None, "", 0, ""
     try:
         port = int(port_s)
     except ValueError:
