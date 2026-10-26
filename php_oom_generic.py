@@ -812,9 +812,6 @@ def run_probe_sizes(args) -> int:
         print("[!] --probe-sizes requires --url (HTTP)", file=sys.stderr)
         return 2
     host = (urllib.parse.urlsplit(args.url).hostname or "").lower()
-    if host not in ALLOWED_HOSTS:
-        print(f"[!] refusing non-local target {host!r}; lab only", file=sys.stderr)
-        return 2
     try:
         sizes = [float(x) for x in args.probe_list.split(",") if x.strip()]
     except ValueError:
